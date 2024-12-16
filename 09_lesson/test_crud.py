@@ -23,6 +23,13 @@ def db_session():
 
 
 def test_add_student(db_session):
+    student = Student(name="John Doe", age=20)
+    db_session.add(student)
+    db_session.commit()
+
+    # Проверяем, что студент добавлен
+    added_student = db_session.query(Student).filter_by(name="John Doe").first()
+    assert added_student is not None, "Student was not added to the database."
     assert added_student.age == 20, f"Expected age 20, but got {added_student.age}"
 
 
@@ -40,3 +47,7 @@ def test_delete_student(db_session):
     student = db_session.query(Student).filter_by(name="John Doe").first()
     db_session.delete(student)
     db_session.commit()
+
+    # Проверяем, что студент удален
+    deleted_student = db_session.query(Student).filter_by(name="John Doe").first()
+    assert deleted_student is None, "Student was not deleted from the database."
